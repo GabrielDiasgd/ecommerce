@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/clients")
@@ -23,7 +24,7 @@ public class ClientRegisterController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> register (@RequestBody ClientRequest clientRequest) {
+    public ResponseEntity<?> register (@Valid @RequestBody ClientRequest clientRequest) {
         Client newClient = clientRequest.toModel();
 
         clientRepository.save(newClient);

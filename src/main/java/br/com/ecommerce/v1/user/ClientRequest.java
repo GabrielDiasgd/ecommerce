@@ -28,4 +28,20 @@ public class ClientRequest {
     public Client toModel() {
         return  new Client(this.name, this.cpf, this.email, this.password);
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }
