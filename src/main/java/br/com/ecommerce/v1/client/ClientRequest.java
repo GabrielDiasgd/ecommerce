@@ -1,4 +1,4 @@
-package br.com.ecommerce.v1.user;
+package br.com.ecommerce.v1.client;
 
 import org.hibernate.validator.constraints.br.CPF;
 

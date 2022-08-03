@@ -14,10 +14,10 @@ public class Category {
     private String name;
 
     @Column(nullable = false)
-    private LocalDateTime dateCreation = LocalDateTime.now();
+    private LocalDateTime createdIn = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime dateUpdate = LocalDateTime.now();
+    private LocalDateTime updatedIn = LocalDateTime.now();
 
     public Category(String name) {
         this.name = name;
@@ -30,5 +30,9 @@ public class Category {
     public Category() {
     }
 
+    public void update(CategoryUpdateRequest request) {
+        this.name = request.getName();
+        this.updatedIn = LocalDateTime.now();
+    }
 }
 

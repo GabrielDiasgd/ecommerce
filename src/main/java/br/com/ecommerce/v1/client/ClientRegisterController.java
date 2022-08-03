@@ -1,4 +1,4 @@
-package br.com.ecommerce.v1.user;
+package br.com.ecommerce.v1.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

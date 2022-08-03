@@ -1,8 +1,8 @@
-package br.com.ecommerce.v1.user;
+package br.com.ecommerce.v1.address;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ClientRepository extends JpaRepository<Client, Long> {
+public interface AddressRepository extends JpaRepository<Address, Long> {
 }

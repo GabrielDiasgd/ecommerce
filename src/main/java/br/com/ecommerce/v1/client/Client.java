@@ -1,4 +1,4 @@
-package br.com.ecommerce.v1.user;
+package br.com.ecommerce.v1.client;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;
@@ -24,10 +24,10 @@ public class Client {
     private String password;
 
     @Column(nullable = false)
-    private LocalDateTime dateCreation = LocalDateTime.now();
+    private LocalDateTime createdIn = LocalDateTime.now();
 
     @Column(nullable = false)
-    private LocalDateTime dateUpdate = LocalDateTime.now();
+    private LocalDateTime updatedIn = LocalDateTime.now();
 
     /**
      * Exclusive use of hibernate
