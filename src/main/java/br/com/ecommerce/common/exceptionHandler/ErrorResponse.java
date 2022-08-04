@@ -29,6 +29,10 @@ public class ErrorResponse {
         this.message = message;
     }
 
+    @Deprecated
+    public ErrorResponse() {
+    }
+
     public LocalDateTime getTimestamp() {
         return timestamp;
     }

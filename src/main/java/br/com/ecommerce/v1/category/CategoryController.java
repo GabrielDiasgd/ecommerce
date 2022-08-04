@@ -6,9 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/categories")
@@ -23,12 +25,14 @@ public class CategoryController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<?> categoryRegistration (@Valid @RequestBody CategoryRequest categoryRequest) {
+    public ResponseEntity<?> categoryRegistration (@Valid @RequestBody CategoryRequest categoryRequest, UriComponentsBuilder uri) {
         Category newCategory = categoryRequest.toModel();
 
         repository.save(newCategory);
 
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        URI location = uri.path("/categories/{id}").buildAndExpand(newCategory.getId()).toUri();
+
+        return ResponseEntity.created(location).build();
     }
 
     @PutMapping("/{id}")

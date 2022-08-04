@@ -20,7 +20,7 @@ public class ApiExceptionHandler {
 
         List<Field> fields = exception.getFieldErrors()
                 .stream()
-                .map(fieldError -> new Field(fieldError.getField(), fieldError.getDefaultMessage()))
+                .map(fieldError -> new Field(fieldError))
                 .collect(Collectors.toList());
 
         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), request.getServletPath(),  fields);
