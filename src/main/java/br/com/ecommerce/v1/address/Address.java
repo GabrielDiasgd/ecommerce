@@ -1,5 +1,7 @@
 package br.com.ecommerce.v1.address;
 
+import br.com.ecommerce.v1.client.Client;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -36,8 +38,11 @@ public class Address {
     @Column(nullable = false)
     private LocalDateTime updatedIn = LocalDateTime.now();
 
+    @ManyToOne(optional = false)
+    private Client client;
 
-    public Address(String street, String neighborhood, String number, String complement, String cep, String city, String state) {
+
+    public Address(String street, String neighborhood, String number, String complement, String cep, String city, String state, Client client) {
         this.street = street;
         this.neighborhood = neighborhood;
         this.number = number;
@@ -45,6 +50,7 @@ public class Address {
         this.cep = cep;
         this.city = city;
         this.state = state;
+        this.client = client;
     }
 
     /**
@@ -80,5 +86,13 @@ public class Address {
 
     public String getState() {
         return state;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public boolean belongs(Client client) {
+        return client.getId().equals(this.client.getId());
     }
 }
