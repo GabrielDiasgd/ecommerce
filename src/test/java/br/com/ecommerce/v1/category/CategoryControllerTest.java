@@ -14,8 +14,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,14 +45,11 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Should register a category when all parameters are valid")
     void test1() throws Exception {
-        //cenario
         CategoryRequest categoryRequest = new CategoryRequest("Test Category");
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(categoryRequest));
-
-        //acao validacao
 
         mockMvc.perform(request)
                 .andExpect(status().isCreated())
@@ -62,14 +61,78 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Shouldn't register a category when parameters are invalid")
     void test2() throws Exception {
-        //cenario
         CategoryRequest categoryRequest = new CategoryRequest("");
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(categoryRequest));
 
-        //acao validacao
+        String jsonResponse = mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andReturn().getResponse().getContentAsString();
+
+        ErrorResponse errorResponse = mapper.readValue(jsonResponse, ErrorResponse.class);
+
+        List<String> messages = errorResponse.getFields().stream()
+                .map(Field::getMessage)
+                .collect(Collectors.toList());
+
+        assertThat(messages)
+                .hasSize(1)
+                .contains("The field name must not be blank");
+    }
+
+    @Test
+    @DisplayName("Shouldn't update a category when category doesn't exist")
+    void test3() throws Exception {
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Test Update Category");
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/categories/{id}", Integer.MAX_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(categoryUpdateRequest));
+
+        Exception resolvedException = mockMvc.perform(request)
+                .andExpect(status().isNotFound())
+                .andReturn().getResolvedException();
+
+        assertNotNull(resolvedException);
+        assertEquals(ResponseStatusException.class, resolvedException.getClass());
+        assertEquals("Category not found", ((ResponseStatusException) resolvedException).getReason());
+    }
+
+
+    @Test
+    @DisplayName("Should update a category when all parameters are valid")
+    void test4() throws Exception {
+        Category category = new Category("Teste");
+        categoryRepository.save(category);
+
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest("Test Update Category");
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/categories/{id}", category.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(categoryUpdateRequest));
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+
+        Optional<Category> updatedCategory = categoryRepository.findById(category.getId());
+
+        assertTrue(updatedCategory.isPresent());
+        assertEquals("Test Update Category", updatedCategory.get().getName());
+    }
+
+    @Test
+    @DisplayName("Shouldn't update a category when parameters are invalid")
+    void test5() throws Exception {
+        Category category = new Category("Teste");
+        categoryRepository.save(category);
+
+        CategoryUpdateRequest categoryUpdateRequest = new CategoryUpdateRequest(null);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.put("/categories/{id}", category.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(categoryUpdateRequest));
 
         String jsonResponse = mockMvc.perform(request)
                 .andExpect(status().isBadRequest())

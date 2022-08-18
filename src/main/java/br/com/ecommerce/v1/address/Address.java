@@ -95,4 +95,8 @@ public class Address {
     public boolean belongs(Client client) {
         return client.getId().equals(this.client.getId());
     }
+
+    public Client getClient() {
+        return this.client;
+    }
 }

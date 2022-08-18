@@ -1,6 +1,7 @@
 package br.com.ecommerce.v1.client;
 
 import br.com.ecommerce.v1.address.Address;
+import org.springframework.data.repository.cdi.Eager;
 
 import javax.persistence.*;
 import java.nio.charset.StandardCharsets;

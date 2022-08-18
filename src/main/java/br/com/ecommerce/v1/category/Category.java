@@ -34,9 +34,12 @@ public class Category {
         this.name = request.getName();
         this.updatedIn = LocalDateTime.now();
     }
-
     public Long getId() {
         return this.id;
+    }
+
+    public String getName() {
+        return name;
     }
 }
 

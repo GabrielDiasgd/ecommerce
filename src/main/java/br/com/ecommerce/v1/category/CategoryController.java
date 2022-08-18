@@ -11,6 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -38,7 +40,8 @@ public class CategoryController {
     @PutMapping("/{id}")
     @Transactional
     public ResponseEntity<?> categoryUpdating (@PathVariable Long id, @Valid @RequestBody CategoryUpdateRequest request) {
-        Category category = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
+        Category category = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found"));
 
         category.update(request);
         repository.save(category);

@@ -24,6 +24,13 @@ public class AddressResponse {
     @NotBlank
     private String state;
 
+    /**
+    exclusive use of jackson
+     */
+    @Deprecated
+    public AddressResponse() {
+    }
+
     public AddressResponse(Address address) {
         this.street = address.getStreet();
         this.neighborhood = address.getNeighborhood();

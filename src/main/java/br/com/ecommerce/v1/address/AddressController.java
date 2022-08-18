@@ -37,9 +37,7 @@ public class AddressController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
 
         Address address = request.toModel(client);
-        client.getAddresses().add(address);
-
-        clientRepository.save(client);
+        repository.save(address);
 
         URI location = uri.path("clients/{idUser}/addresses/{idAddress}").buildAndExpand(client.getId(), address.getId()).toUri();
 
